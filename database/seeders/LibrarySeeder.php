@@ -5,12 +5,46 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Kategori;
 use App\Models\Buku;
+use App\Models\User;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class LibrarySeeder extends Seeder
 {
     public function run()
     {
+        // Seeding Default Users
+        User::firstOrCreate(
+            ['email' => 'admin@bacapedia.com'],
+            [
+                'user_id' => Str::uuid()->toString(),
+                'nama' => 'Administrator',
+                'password' => Hash::make('password'),
+                'role' => 'Admin',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'petugas@bacapedia.com'],
+            [
+                'user_id' => Str::uuid()->toString(),
+                'nama' => 'Petugas Perpustakaan',
+                'password' => Hash::make('password'),
+                'role' => 'Petugas',
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'user@gmail.com'],
+            [
+                'user_id' => Str::uuid()->toString(),
+                'nama' => 'Anggota Biasa',
+                'password' => Hash::make('password'),
+                'role' => 'Anggota',
+            ]
+        );
+
+        // Seeding Kategori
         $categories = [
             'Fiksi',
             'Sains & Teknologi',
