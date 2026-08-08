@@ -1,0 +1,561 @@
+{
+  "info": {
+    "_postman_id": "e45842f1-6784-48f8-b342-d65fa369bcda",
+    "name": "Bacapedia API Collection",
+    "description": "Koleksi Postman untuk testing seluruh endpoint API dari Sistem Manajemen Perpustakaan Digital Bacapedia.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Autentikasi",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nama",
+                  "value": "Admin Utama",
+                  "type": "text"
+                },
+                {
+                  "key": "email",
+                  "value": "admin@bacapedia.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "type": "text"
+                },
+                {
+                  "key": "role",
+                  "value": "Admin",
+                  "description": "Pilihan: Admin, Petugas, Anggota",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.access_token) {",
+                  "    pm.collectionVariables.set(\"token\", jsonData.access_token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "email",
+                  "value": "admin@bacapedia.com",
+                  "type": "text"
+                },
+                {
+                  "key": "password",
+                  "value": "password123",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Authenticated User",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/user",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "user"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Master Data Kategori",
+      "description": "Hanya role Admin",
+      "item": [
+        {
+          "name": "Get Semua Kategori",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/kategoris",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "kategoris"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah Kategori",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "nama_kategori",
+                  "value": "Pemrograman",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/kategoris",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "kategoris"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail Kategori",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/kategoris/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "kategoris",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Kategori",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "nama_kategori",
+                  "value": "Sains & Teknologi",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/kategoris/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "kategoris",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Kategori",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/kategoris/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "kategoris",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Master Data Buku",
+      "item": [
+        {
+          "name": "Get Semua Buku",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/bukus",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bukus"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Tambah Buku (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "judul",
+                  "value": "Belajar Laravel 11",
+                  "type": "text"
+                },
+                {
+                  "key": "penulis",
+                  "value": "Jane Doe",
+                  "type": "text"
+                },
+                {
+                  "key": "penerbit",
+                  "value": "Tech Press",
+                  "type": "text"
+                },
+                {
+                  "key": "kategori_id",
+                  "value": "1",
+                  "type": "text"
+                },
+                {
+                  "key": "stok",
+                  "value": "10",
+                  "type": "text"
+                },
+                {
+                  "key": "tahun_terbit",
+                  "value": "2024",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/bukus",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bukus"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Detail Buku",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/bukus/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bukus",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Buku (Admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "stok",
+                  "value": "5",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/bukus/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bukus",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Buku (Admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/bukus/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "bukus",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Peminjaman & Pengembalian",
+      "item": [
+        {
+          "name": "Pinjam Buku (Anggota/Semua)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "buku_id",
+                  "value": "1",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/peminjaman",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "peminjaman"
+              ]
+            }
+          }
+        },
+        {
+          "name": "History Peminjaman",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/peminjaman",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "peminjaman"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Pengembalian Buku (Petugas/Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/peminjaman/1/return",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "peminjaman",
+                "1",
+                "return"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000"
+    },
+    {
+      "key": "token",
+      "value": "PASTE_TOKEN_HERE"
+    }
+  ]
+}
