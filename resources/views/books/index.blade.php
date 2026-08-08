@@ -41,11 +41,20 @@
             @foreach($buku as $b)
                 <div class="bg-white rounded-3xl border border-slate-100/50 shadow-[0_4px_20px_rgb(0,0,0,0.03)] overflow-hidden hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1.5 transition-all duration-300 group flex flex-col">
                     <div class="h-48 bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center p-6 relative">
-                        <!-- Simulated Book Cover -->
-                        <div class="w-24 h-32 bg-white shadow-md rounded border-l-4 border-indigo-500 flex items-center justify-center text-center p-2 transform group-hover:scale-105 transition-transform duration-300">
-                            <span class="text-xs font-bold text-slate-800 line-clamp-3">{{ $b->judul }}</span>
-                        </div>
-                        <div class="absolute top-4 right-4">
+                        @if($b->sampul)
+                            <div class="absolute inset-0 z-0">
+                                <img src="{{ Storage::url($b->sampul) }}" alt="{{ $b->judul }}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-black/30 backdrop-blur-sm group-hover:backdrop-blur-none transition-all duration-300"></div>
+                            </div>
+                            <div class="z-10 w-24 h-32 shadow-md rounded flex items-center justify-center transform group-hover:scale-105 transition-transform duration-300 overflow-hidden border border-white/20">
+                                <img src="{{ Storage::url($b->sampul) }}" alt="{{ $b->judul }}" class="w-full h-full object-cover">
+                            </div>
+                        @else
+                            <div class="z-10 w-24 h-32 bg-white shadow-md rounded border-l-4 border-indigo-500 flex items-center justify-center text-center p-2 transform group-hover:scale-105 transition-transform duration-300">
+                                <span class="text-xs font-bold text-slate-800 line-clamp-3">{{ $b->judul }}</span>
+                            </div>
+                        @endif
+                        <div class="absolute top-4 right-4 z-10">
                             <span class="bg-white/80 backdrop-blur-sm text-indigo-700 text-xs font-bold px-2 py-1 rounded-lg">
                                 {{ $b->kategori->nama_kategori ?? 'Umum' }}
                             </span>

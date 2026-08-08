@@ -1,76 +1,93 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="max-w-4xl mx-auto space-y-6">
-    <a href="{{ route('books.index') }}" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors mb-4">
+<div class="max-w-5xl mx-auto space-y-6">
+    <a href="{{ route('books.index') }}" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-indigo-600 transition-colors mb-2">
         <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
         </svg>
-        Kembali ke Katalog
+        Kembali ke Koleksi
     </a>
 
-    <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden flex flex-col md:flex-row">
-        <!-- Book Cover Area -->
-        <div class="md:w-1/3 bg-gradient-to-br from-indigo-100 to-purple-100 p-8 flex items-center justify-center min-h-[300px]">
-            <div class="w-40 h-56 bg-white shadow-xl rounded border-l-8 border-indigo-500 flex flex-col items-center justify-center text-center p-4 transform hover:rotate-3 transition-transform duration-500">
-                <span class="text-sm font-bold text-slate-800 line-clamp-4">{{ $buku->judul }}</span>
-                <span class="text-xs text-slate-500 mt-2">{{ $buku->penulis }}</span>
+    <div class="bg-white rounded-3xl shadow-sm overflow-hidden border border-slate-100">
+        <!-- Banner -->
+        <div class="relative h-64 sm:h-80 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center overflow-hidden">
+            @if($buku->sampul)
+                <img src="{{ Storage::url($buku->sampul) }}" alt="{{ $buku->judul }}" class="absolute inset-0 w-full h-full object-cover opacity-40 blur-sm">
+                <img src="{{ Storage::url($buku->sampul) }}" alt="{{ $buku->judul }}" class="z-10 h-56 sm:h-72 object-contain shadow-2xl rounded-lg border border-white/20">
+            @else
+                <!-- Large Document Icon -->
+                <svg class="w-32 h-32 text-white opacity-20" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z" />
+                </svg>
+            @endif
+            
+            <div class="absolute bottom-6 left-6 z-20">
+                <span class="inline-block px-4 py-1.5 bg-white/20 backdrop-blur-md text-white text-xs font-bold rounded-full shadow-sm">
+                    {{ $buku->kategori->nama_kategori ?? 'Umum' }}
+                </span>
             </div>
         </div>
-        
-        <!-- Book Details Area -->
-        <div class="md:w-2/3 p-8 flex flex-col">
-            <div class="flex justify-between items-start mb-4">
+
+        <div class="p-8">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-8">
                 <div>
-                    <div class="inline-block px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg mb-3">
-                        {{ $buku->kategori->nama_kategori ?? 'Umum' }}
-                    </div>
                     <h1 class="text-3xl font-bold text-slate-800 mb-2">{{ $buku->judul }}</h1>
-                    <p class="text-lg text-slate-600 font-medium">{{ $buku->penulis }}</p>
+                    <p class="text-slate-500 font-medium">
+                        {{ $buku->penulis }} &bull; {{ $buku->penerbit }}
+                    </p>
+                </div>
+                <div class="mt-4 sm:mt-0">
+                    <span class="inline-flex items-center px-4 py-1.5 {{ $buku->stok > 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }} text-sm font-bold rounded-full">
+                        @if($buku->stok > 0)
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            {{ $buku->stok }} Stok Tersedia
+                        @else
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            Stok Habis
+                        @endif
+                    </span>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-6 my-8">
+            <div class="bg-slate-50 rounded-2xl p-6 mb-8 grid grid-cols-1 sm:grid-cols-3 gap-6 border border-slate-100">
                 <div>
-                    <p class="text-sm text-slate-500 mb-1">Penerbit</p>
-                    <p class="font-semibold text-slate-800">{{ $buku->penerbit }}</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Penerbit</p>
+                    <p class="font-semibold text-slate-700">{{ $buku->penerbit }}</p>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500 mb-1">Tahun Terbit</p>
-                    <p class="font-semibold text-slate-800">{{ $buku->tahun_terbit }}</p>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Tahun Terbit</p>
+                    <p class="font-semibold text-slate-700">{{ $buku->tahun_terbit }}</p>
                 </div>
                 <div>
-                    <p class="text-sm text-slate-500 mb-1">Kode Buku</p>
-                    <p class="font-semibold text-slate-800 font-mono bg-slate-100 px-2 py-1 rounded inline-block">{{ $buku->buku_id }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-slate-500 mb-1">Stok Tersedia</p>
-                    <div class="flex items-center">
-                        <span class="w-2 h-2 rounded-full mr-2 {{ $buku->stok > 0 ? 'bg-green-500' : 'bg-red-500' }}"></span>
-                        <p class="font-bold {{ $buku->stok > 0 ? 'text-green-600' : 'text-red-500' }}">{{ $buku->stok }}</p>
-                    </div>
+                    <p class="text-xs text-slate-400 font-bold uppercase tracking-wider mb-1">Kategori</p>
+                    <p class="font-semibold text-slate-700">{{ $buku->kategori->nama_kategori ?? 'Umum' }}</p>
                 </div>
             </div>
 
-            <div class="mt-auto pt-6 border-t border-slate-100 flex items-center space-x-4">
-                @if($buku->stok > 0)
-                    <form action="{{ route('borrows.borrow') }}" method="POST" class="flex-1 flex" onsubmit="return confirm('Apakah Anda yakin ingin meminjam buku ini?');">
+            <div class="flex items-center space-x-4">
+                @if(Auth::check() && (Auth::user()->role === 'Admin' || Auth::user()->role === 'Petugas'))
+                    <a href="{{ route('admin.books.edit', $buku->id) }}" class="px-6 py-2.5 bg-white border border-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-50 transition-colors shadow-sm">
+                        Edit Buku
+                    </a>
+                    <form action="{{ route('admin.books.destroy', $buku->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus buku ini?');">
                         @csrf
-                        <input type="hidden" name="buku_id" value="{{ $buku->id }}">
-                        <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-center">
-                            Pinjam Buku Ini
+                        @method('DELETE')
+                        <button type="submit" class="px-6 py-2.5 bg-[#f43f5e] text-white font-bold rounded-xl hover:bg-rose-600 transition-colors shadow-sm shadow-rose-500/30">
+                            Hapus Buku
                         </button>
                     </form>
                 @else
-                    <button class="flex-1 bg-slate-200 text-slate-500 font-bold py-3 px-6 rounded-xl cursor-not-allowed text-center" disabled>
-                        Stok Habis
-                    </button>
+                    @if($buku->stok > 0)
+                        <form action="{{ route('borrows.borrow') }}" method="POST" class="flex-1 max-w-xs" onsubmit="return confirm('Apakah Anda yakin ingin meminjam buku ini?');">
+                            @csrf
+                            <input type="hidden" name="buku_id" value="{{ $buku->id }}">
+                            <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white font-bold py-3 px-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 text-center">
+                                Pinjam Buku Ini
+                            </button>
+                        </form>
+                    @endif
                 @endif
-                <button class="w-12 h-12 rounded-xl border border-slate-200 flex items-center justify-center text-slate-400 hover:text-rose-500 hover:border-rose-200 hover:bg-rose-50 transition-colors">
-                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                </button>
             </div>
         </div>
     </div>

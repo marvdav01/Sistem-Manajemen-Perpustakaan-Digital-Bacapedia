@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -13,10 +14,12 @@ class BookController extends Controller
     {
         $query = Buku::with('kategori');
 
-        if ($request->has('search')) {
+        if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('judul', 'like', "%{$search}%")
+            $query->where(function($q) use ($search) {
+                $q->where('judul', 'like', "%{$search}%")
                   ->orWhere('penulis', 'like', "%{$search}%");
+            });
         }
 
         if ($request->has('kategori') && $request->input('kategori') != '') {
@@ -58,7 +61,13 @@ class BookController extends Controller
             'kategori_id' => 'required|exists:kategoris,id',
             'stok' => 'required|integer|min:0',
             'tahun_terbit' => 'required|integer',
+            'sampul' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+
+        $sampulPath = null;
+        if ($request->hasFile('sampul')) {
+            $sampulPath = $request->file('sampul')->store('sampuls', 'public');
+        }
 
         Buku::create([
             'buku_id' => \Illuminate\Support\Str::uuid()->toString(),
@@ -68,6 +77,7 @@ class BookController extends Controller
             'kategori_id' => $request->kategori_id,
             'stok' => $request->stok,
             'tahun_terbit' => $request->tahun_terbit,
+            'sampul' => $sampulPath,
         ]);
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil ditambahkan.');
@@ -91,9 +101,19 @@ class BookController extends Controller
             'kategori_id' => 'required|exists:kategoris,id',
             'stok' => 'required|integer|min:0',
             'tahun_terbit' => 'required|integer',
+            'sampul' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
+        
+        $data = $request->all();
 
-        $buku->update($request->all());
+        if ($request->hasFile('sampul')) {
+            if ($buku->sampul) {
+                Storage::disk('public')->delete($buku->sampul);
+            }
+            $data['sampul'] = $request->file('sampul')->store('sampuls', 'public');
+        }
+
+        $buku->update($data);
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil diperbarui.');
     }
@@ -101,6 +121,11 @@ class BookController extends Controller
     public function destroy($id)
     {
         $buku = Buku::findOrFail($id);
+        
+        if ($buku->sampul) {
+            Storage::disk('public')->delete($buku->sampul);
+        }
+        
         $buku->delete();
 
         return redirect()->route('admin.books.index')->with('success', 'Buku berhasil dihapus.');

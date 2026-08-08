@@ -62,7 +62,7 @@ class BorrowController extends Controller
 
         if ($today->gt($jatuhTempo)) {
             $hariTerlambat = $today->diffInDays($jatuhTempo);
-            $denda = $hariTerlambat * 2000;
+            $denda = $hariTerlambat * 5000;
         }
 
         $peminjaman->update([

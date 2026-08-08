@@ -12,7 +12,7 @@
     </div>
 
     <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8">
-        <form action="{{ route('admin.books.update', $buku->id) }}" method="POST" class="space-y-6">
+        <form action="{{ route('admin.books.update', $buku->id) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
             @csrf
             @method('PUT')
             
@@ -62,6 +62,17 @@
                 <div>
                     <label for="stok" class="block text-sm font-semibold text-slate-700 mb-2">Jumlah Stok</label>
                     <input type="number" id="stok" name="stok" value="{{ old('stok', $buku->stok) }}" min="0" required class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label for="sampul" class="block text-sm font-semibold text-slate-700 mb-2">Gambar Sampul Buku (Baru)</label>
+                    @if($buku->sampul)
+                        <div class="mb-3">
+                            <img src="{{ Storage::url($buku->sampul) }}" alt="Sampul saat ini" class="h-32 object-contain rounded-lg border border-slate-200">
+                        </div>
+                    @endif
+                    <input type="file" id="sampul" name="sampul" accept="image/*" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all duration-200 bg-white">
+                    <p class="text-xs text-slate-500 mt-1">Kosongkan jika tidak ingin mengubah sampul. Format: JPG, PNG, GIF (Maks: 2MB)</p>
                 </div>
             </div>
 
