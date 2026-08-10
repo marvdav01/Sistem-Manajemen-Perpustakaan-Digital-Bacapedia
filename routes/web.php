@@ -51,6 +51,10 @@ Route::middleware('auth')->group(function () {
         Route::put('/admin/books/{id}', [BookController::class, 'update'])->name('admin.books.update');
         Route::delete('/admin/books/{id}', [BookController::class, 'destroy'])->name('admin.books.destroy');
         
+    });
+
+    // Admin Only Routes
+    Route::middleware('role:Admin')->group(function () {
         // Admin Categories CRUD
         Route::get('/admin/categories', [\App\Http\Controllers\Web\CategoryController::class, 'index'])->name('admin.categories.index');
         Route::get('/admin/categories/create', [\App\Http\Controllers\Web\CategoryController::class, 'create'])->name('admin.categories.create');

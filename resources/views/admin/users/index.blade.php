@@ -25,6 +25,7 @@
                         <th class="py-4 px-6 font-semibold text-sm text-slate-600">Nama</th>
                         <th class="py-4 px-6 font-semibold text-sm text-slate-600">Email</th>
                         <th class="py-4 px-6 font-semibold text-sm text-slate-600">Role</th>
+                        <th class="py-4 px-6 font-semibold text-sm text-slate-600">Tanggal Bergabung</th>
                         <th class="py-4 px-6 font-semibold text-sm text-slate-600 text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -45,6 +46,9 @@
                                     {{ $user->role }}
                                 </span>
                             </td>
+                            <td class="py-4 px-6 text-sm text-slate-500">
+                                {{ $user->created_at ? $user->created_at->format('d M Y') : '-' }}
+                            </td>
                             <td class="py-4 px-6 text-right space-x-2">
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="inline-flex items-center text-indigo-600 hover:text-indigo-900 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium">
                                     Edit
@@ -62,7 +66,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="py-12 text-center text-slate-500">
+                            <td colspan="5" class="py-12 text-center text-slate-500">
                                 Belum ada data pengguna.
                             </td>
                         </tr>
